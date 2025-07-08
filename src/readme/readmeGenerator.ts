@@ -1,6 +1,8 @@
+import path from "path";
 import { ai } from "../config/gemini";
 import { File } from "../types/File";
 import fs from "fs";
+import { fileURLToPath } from "url";
 
 export async function generateReadme(abstracts: File[]) {
 
@@ -48,7 +50,14 @@ export async function generateReadme(abstracts: File[]) {
             return;
         }
 
-        fs.writeFileSync("README.md", readme, "utf8");
+        const outputDir = path.resolve(process.cwd(), 'output');
+
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir);
+        }
+
+        const outputPath = path.join(outputDir, 'README.md');
+        fs.writeFileSync(outputPath, readme, 'utf8');
 
         console.log("\n🏁 README.md gerado com sucesso!\n");
     } catch (err) {

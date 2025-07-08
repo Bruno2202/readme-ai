@@ -85,7 +85,7 @@ A estrutura de diretórios do `README.ai` é organizada de forma modular para fa
 Contribuições são muito bem-vindas! Se você deseja colaborar com o projeto `README.ai`, siga estas diretrizes:
 
 1.  **Fork** o repositório.
-2.  **Clone** o seu fork localmente: `git clone https://github.com/seu-usuario/README.ai.git`
+2.  **Clone** o seu fork localmente: `git clone https://github.com/Bruno2202/README.ai.git`
 3.  Crie uma nova **branch** para suas alterações: `git checkout -b feature/minha-nova-funcionalidade` ou `bugfix/correcao-de-erro`.
 4.  Faça suas **alterações** e escreva **commits claros e descritivos**.
 5.  Envie suas alterações para o seu fork: `git push origin feature/minha-nova-funcionalidade`
