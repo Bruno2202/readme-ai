@@ -4,6 +4,8 @@ import { scanFile } from './core/fileScanner';
 import { generateReadme } from './readme/readmeGenerator';
 import { File } from "./types/File";
 import Enquirer from 'enquirer';
+import { validateGitRepo } from './utils/validateGitRepo';
+import { gitClone } from './core/gitCloner';
 
 async function main() {
     const enquirer = new Enquirer();
@@ -51,7 +53,7 @@ async function main() {
                     console.warn("\n❔ Diretório não informado.");
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 } else {
-                    projectDir = path.resolve(dirInput.normalize('NFC')).replace(/\\/g, '/');
+                    projectDir = dirInput;
                     console.log(`\n📁 Diretório definido como: ${projectDir}\n`);
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 }
@@ -63,6 +65,19 @@ async function main() {
                     console.warn("\n⚠️ Você precisa informar o diretório primeiro (opção 1).");
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 } else {
+                    const isGitRepo = validateGitRepo(projectDir);
+
+                    if (isGitRepo) {
+                        const newProjectDir = await gitClone(projectDir);
+
+                        if (!newProjectDir) {
+                            await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
+                            return;
+                        }
+
+                        projectDir = newProjectDir;
+                    }
+
                     console.log(`\n🛠️ Gerando README para: ${projectDir}\n`);
 
                     const files = readFiles(projectDir);
