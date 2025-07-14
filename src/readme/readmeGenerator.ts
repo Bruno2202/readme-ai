@@ -59,8 +59,8 @@ export async function generateReadme(abstracts: File[]) {
         const outputPath = path.join(outputDir, 'README.md');
         fs.writeFileSync(outputPath, readme, 'utf8');
 
-        console.log("\n🏁 README.md gerado com sucesso!\n");
+        console.log("🏁 README.md gerado com sucesso!\n");
     } catch (err) {
-        console.error(`\n❌ Erro ao gerar README.md: ${err}\n`);
+        console.error(`❌ Erro ao gerar README.md: ${err}\n`);
     }
 }
