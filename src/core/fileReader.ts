@@ -1,7 +1,7 @@
 import { File } from "../types/File";
 import fs from "fs";
 import path from "path";
-import { IGNORED_PATHS, VALID_EXTENSIONS } from "../config/files";
+import { IGNORED_PATHS, VALID_EXTENSIONS, VALID_FILENAMES } from "../config/files";
 
 export function readFiles(dirPath: string): File[] {
     const files: File[] = [];
@@ -17,8 +17,10 @@ export function readFiles(dirPath: string): File[] {
                 searchFiles(filePath);
             } else {
                 const extensionRegex = new RegExp(`\\.(${VALID_EXTENSIONS.join('|')})$`, 'i');
+                const isValidExtension = extensionRegex.test(item);
+                const isValidFilename = VALID_FILENAMES.includes(item.toUpperCase());
 
-                if (extensionRegex.test(item)) {
+                if (isValidExtension || isValidFilename) {
                     const content = fs.readFileSync(filePath, "utf8");
                     files.push({ name: path.relative(dirPath, filePath), content });
                 }
