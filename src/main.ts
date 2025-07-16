@@ -44,13 +44,19 @@ async function main() {
                 const response = await enquirer.prompt({
                     type: 'input',
                     name: 'dir',
-                    message: 'Informe o diretório do projeto:'
+                    message: 'Informe a URL do repositório no GitHub ou o caminho do diretório local do projeto:'
                 }) as { dir: string };
 
                 const dirInput = response.dir.trim();
 
+                if (!validateGitRepo(dirInput)) {
+                    console.warn("\n❌ O caminho informado não é um diretório válido.\n");
+                    await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
+                    break;
+                }
+
                 if (!dirInput) {
-                    console.warn("\n❔ Diretório não informado.");
+                    console.warn("\n❔ Diretório não informado.\n");
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 } else {
                     projectDir = dirInput;
@@ -62,7 +68,7 @@ async function main() {
 
             case '2': {
                 if (!projectDir.trim()) {
-                    console.warn("\n⚠️ Você precisa informar o diretório primeiro (opção 1).");
+                    console.warn("\n⚠️ Você precisa informar o diretório primeiro (opção 1).\n");
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 } else {
                     const isGitRepo = validateGitRepo(projectDir);
