@@ -6,6 +6,7 @@ import { File } from "./types/File";
 import Enquirer from 'enquirer';
 import { validateGitRepo } from './utils/validateGitRepo';
 import { gitClone } from './core/gitCloner';
+import { validateLocalPath } from './utils/validateLocalPath';
 
 async function main() {
     const enquirer = new Enquirer();
@@ -49,20 +50,18 @@ async function main() {
 
                 const dirInput = response.dir.trim();
 
-                if (!validateGitRepo(dirInput)) {
-                    console.warn("\n❌ O caminho informado não é um diretório válido.\n");
-                    await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
-                    break;
-                }
-
                 if (!dirInput) {
                     console.warn("\n❔ Diretório não informado.\n");
+                    await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
+                } else if (!validateGitRepo(dirInput) && !validateLocalPath(dirInput)) {
+                    console.warn("\n❌ Caminho ou repositório inválido.\n");
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 } else {
                     projectDir = dirInput;
                     console.log(`\n📁 Diretório definido como: ${projectDir}\n`);
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 }
+
                 break;
             }
 
