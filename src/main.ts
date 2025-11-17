@@ -22,6 +22,7 @@ async function main() {
 
     let running = true;
     let projectDir = "";
+    let customPrompt = "";
 
     while (running) {
         console.clear();
@@ -34,7 +35,8 @@ async function main() {
             choices: [
                 { name: '1', message: 'Informar diretório do projeto' },
                 { name: '2', message: 'Gerar README' },
-                { name: '3', message: 'Sair' }
+                { name: '3', message: 'Definir prompt personalizado' },
+                { name: '4', message: 'Sair' }
             ]
         });
 
@@ -95,14 +97,34 @@ async function main() {
                         await new Promise(resolve => setTimeout(resolve, 3500));
                     }
 
-                    await generateReadme(abstracts);
+                    await generateReadme(abstracts, customPrompt);
 
                     await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
                 }
                 break;
             }
 
-            case '3':
+            case '3': {
+                const response = await enquirer.prompt({
+                    type: 'input',
+                    name: 'prompt',
+                    message: 'Defina um prompt personalizado para gerar o seu README.me: '
+                }) as { prompt: string };
+
+                customPrompt = response.prompt.trim();
+
+                if (!customPrompt) {
+                    console.warn("\n❔ Prompt não informado.\n");
+                    await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
+                } else {
+                    console.log(`\n✅ Prompt salvo com sucesso! O próximo README.me gerado será com base nele\n`);
+                    await enquirer.prompt({ type: 'confirm', name: 'cont', message: 'Pressione Enter para voltar ao menu...' });
+                }
+
+                break;
+            }
+
+            case '4':
                 console.log("\n👋 Saindo... Obrigado por usar o README.ai!");
                 running = false;
                 break;
