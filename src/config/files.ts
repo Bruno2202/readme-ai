@@ -42,4 +42,12 @@ export const VALID_FILENAMES = [
 ];
 
 // Arquivos que serão ignorados
-export const IGNORED_PATHS = ["node_modules", ".git", "dist"]; 
+export const IGNORED_PATHS = [
+    "node_modules", 
+    ".git", 
+    "dist",
+    ".idea",
+    ".mvn",
+    "out",
+    "target"
+]; 
