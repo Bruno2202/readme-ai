@@ -1,6 +1,5 @@
-import path from 'path';
 import { readFiles } from './core/fileReader';
-import { scanFile } from './core/fileScanner';
+import { scanFiles } from './core/fileScanner';
 import { generateReadme } from './readme/readmeGenerator';
 import { File } from "./types/File";
 import Enquirer from 'enquirer';
@@ -90,11 +89,26 @@ async function main() {
                     const files = readFiles(projectDir);
                     const abstracts: File[] = [];
 
-                    for (const file of files) {
-                        const abstract = await scanFile(file.name, file.content);
-                        abstracts.push(abstract);
+                    const BATCH_SIZE = 10;
 
-                        await new Promise(resolve => setTimeout(resolve, 3500));
+                    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+                        const batch = files.slice(i, i + BATCH_SIZE);
+
+                        const batchResults = await scanFiles(batch);
+
+                        if (batchResults.length === 0) {
+                            console.log("⚠️ Falha no lote ou limite atingido. Tentando respirar mais tempo...");
+                            await new Promise(resolve => setTimeout(resolve, 20000));
+                            i -= BATCH_SIZE;
+                            continue;
+                        }
+
+                        abstracts.push(...batchResults);
+
+                        if (i + BATCH_SIZE < files.length) {
+                            console.log("⏳ Respeitando cota da API (10s)...");
+                            await new Promise(resolve => setTimeout(resolve, 10000));
+                        }
                     }
 
                     await generateReadme(abstracts, customPrompt);

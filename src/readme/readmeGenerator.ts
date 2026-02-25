@@ -43,7 +43,7 @@ export async function generateReadme(abstracts: File[], customPrompt: string) {
                     5. Estrutura do projeto — pastas e arquivos mais importantes resumidamente
                     6. Como contribuir — orientações para colaboradores
                     7. Licença — informe a licença utilizada, se houver
-                    8. Nota final — informe que o README foi gerado automaticamente pelo README.ai
+                    8. Nota final — informe que o README foi gerado automaticamente pelo README.ai e deixe o link para acesso ao github do projeto: https://github.com/Bruno2202/readme-ai
 
                     Use uma linguagem clara, profissional e objetiva. Evite detalhes técnicos muito específicos. Foque em facilitar o entendimento do projeto para novos desenvolvedores. Caso as informações não estejam explícitas, use inferência com base na análise dos arquivos.
 
